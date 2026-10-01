@@ -6,7 +6,7 @@ def list_credentials():
     """
     List all credential files in C:\app\jenkins\conf\
     """
-    conf_dir = Path(r"C:\app\jenkins\conf\")
+    conf_dir = Path(r"C:\app\jenkins\conf")
     
     if not conf_dir.exists():
         print(f"Directory not found: {conf_dir}")
