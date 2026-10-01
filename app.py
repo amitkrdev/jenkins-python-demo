@@ -4,7 +4,7 @@ from pathlib import Path
 
 def list_credentials():
     """
-    List all test credential files in C:\app\jenkins\conf\
+    List all credential files in C:\app\jenkins\conf\ that contain 'amt' in the filename
     """
     conf_dir = Path(r"C:\app\jenkins\conf")
     
@@ -12,13 +12,14 @@ def list_credentials():
         print(f"Directory not found: {conf_dir}")
         return []
     
-    cred_files = list(conf_dir.glob("test_cred_*.cred.xml"))
+    # Look for files with 'amt' in the name
+    cred_files = list(conf_dir.glob("*amt*_cred_*.cred.xml"))
     
     if not cred_files:
-        print("No test credential files found in C:\\app\\jenkins\\conf\\")
+        print("No credential files with 'amt' in the name found in C:\\app\\jenkins\\conf\\")
         return []
     
-    print(f"Found {len(cred_files)} test credential file(s):")
+    print(f"Found {len(cred_files)} credential file(s) with 'amt' in the name:")
     for file in cred_files:
         print(f"  - {file.name}")
     
@@ -26,24 +27,25 @@ def list_credentials():
 
 def load_credentials():
     """
-    Load credentials from test_cred_*.cred.xml PowerShell encrypted XML format
+    Load credentials from PowerShell encrypted XML format
+    Match only files with 'amt' in the filename
     """
     username = os.environ.get("USERNAME", "unknown")
     computername = os.environ.get("COMPUTERNAME", "unknown")
     
     conf_dir = Path(r"C:\app\jenkins\conf")
     
-    # Look for test credential files ONLY
-    cred_files = list(conf_dir.glob("test_cred_*.cred.xml"))
+    # Look for credential files with 'amt' in the name ONLY
+    cred_files = list(conf_dir.glob("*amt*_cred_*.cred.xml"))
     
     if not cred_files:
-        raise RuntimeError("No test credential files found in C:\\app\\jenkins\\conf\\")
+        raise RuntimeError("No credential files with 'amt' in the name found in C:\\app\\jenkins\\conf\\")
     
     # Filter to match current user and computer
     matching_files = [f for f in cred_files if username in f.name and computername in f.name]
     
     if not matching_files:
-        raise RuntimeError(f"No test credential file found for {username}@{computername}")
+        raise RuntimeError(f"No credential file with 'amt' in the name found for {username}@{computername}")
     
     cred_file = matching_files[0]
     print(f"\nLoading from: {cred_file.name}")
