@@ -6,7 +6,8 @@ def test_list_credentials():
     assert len(files) > 0
 
 def test_load_credentials():
-    """Test that credentials can be loaded and printed"""
+    """Test that credentials can be loaded from test_cred_*.cred.xml"""
     username, password = load_credentials()
-    assert username is not None
-    assert password is not None
+    assert username == 'testuser'
+    assert password == 'test-api-key-12345'
+    print(f"✓ Test passed - loaded credentials for {username}")
